@@ -1,13 +1,13 @@
 const validateServiceProperty = require('../../validate-service-property');
 
 const deployCloudRunSteps = (serviceName, serviceConfig) => {
-  const { deploy, image } = serviceConfig;
-  const { name: deployName, options = {}, environment } = deploy;
-  const { memory, public, region, vpc_conector: vpcConnector } = options;
-
   validateServiceProperty(serviceConfig, serviceName, 'image');
   validateServiceProperty(serviceConfig, serviceName, 'deploy.name');
   validateServiceProperty(serviceConfig, serviceName, 'deploy.options.region');
+
+  const { deploy, image } = serviceConfig;
+  const { name: deployName, options = {}, environment, public } = deploy;
+  const { memory, region, vpc_conector: vpcConnector } = options;
 
   let args = `CMD="gcloud beta run deploy ${deployName}` +
     ` --image gcr.io/$PROJECT_ID/${image}` +
