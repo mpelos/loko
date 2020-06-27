@@ -28,7 +28,7 @@ const deployCloudRunSteps = (serviceName, serviceConfig) => {
   }
 
   args += `"
-echo $$CMD
+echo \\$ $$CMD
 $$CMD
   `;
 

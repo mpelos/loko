@@ -46,7 +46,7 @@ const buildDeployStep = (serviceName, serviceConfig) => {
   }
 
   args += `"
-echo $$CMD
+echo \\$ $$CMD
 $$CMD
   `;
 
