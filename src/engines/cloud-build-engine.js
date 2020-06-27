@@ -22,7 +22,6 @@ const CloudBuildEngine = (config) => {
       if (config.engine.timeout) { buildConfig.timeout = config.engine.timeout; }
 
       buildConfigs[serviceName] = YAML.stringify(buildConfig, null, 4);
-      console.log(buildConfigs[serviceName]);
     });
 
     return buildConfigs;
@@ -45,7 +44,7 @@ const CloudBuildEngine = (config) => {
         if (result.code === 0) {
           const logLine = result.stderr.split('\n')[1];
           const logUrl = /\[(.+)\]/.exec(logLine)[1];
-          console.log(`${serviceName}: ${logUrl}`);
+          console.info(`${serviceName}: ${logUrl}`);
         }
 
         cleanupCallback();

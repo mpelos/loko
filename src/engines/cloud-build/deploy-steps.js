@@ -1,5 +1,6 @@
 const deployCloudFunctionSteps = require('./deploy-cloud-functions-steps');
 const deployCloudRunSteps = require('./deploy-cloud-run-steps');
+const deployFirebaseHostingSteps = require('./deploy-firebase-hosting-steps');
 const deployStorageSteps = require('./deploy-storage-steps');
 const validateServiceProperty = require('../../validate-service-property');
 
@@ -11,6 +12,8 @@ const deploySteps = (serviceName, serviceConfig) => {
   validateServiceProperty(serviceConfig, serviceName, 'deploy.type');
 
   switch (deployType) {
+    case 'firebase-hosting':
+      return deployFirebaseHostingSteps(serviceName, serviceConfig);
     case 'google-cloud-functions':
       return deployCloudFunctionSteps(serviceName, serviceConfig);
     case 'google-cloud-run':

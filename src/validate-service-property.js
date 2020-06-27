@@ -3,7 +3,6 @@ const validateServiceProperty = (serviceConfig, serviceName, path) => {
 
   path.split('.').reduce((prev, key) => {
     const value = prev[key];
-    console.log(prev, key)
     if (value === undefined) { hasErr = true; }
     return prev[key] || {};
   }, serviceConfig);

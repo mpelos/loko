@@ -8,10 +8,10 @@ const buildServiceSteps = (serviceName, serviceConfig) => {
 
   return [
     buildCloneGitRepoStep(repository, { branch, head }),
-    buildBuildImageStep(image),
+    buildBuildImageStep(serviceName, serviceConfig),
     buildPushImageStep(image),
   ];
-}
+};
 
 const buildCloneGitRepoStep = (repo, { branch = 'master', head } = {}) => {
   let args = 'git clone ';
@@ -26,10 +26,27 @@ const buildCloneGitRepoStep = (repo, { branch = 'master', head } = {}) => {
     entrypoint: 'bash',
     args: ['-c', args],
   }
-}
+};
 
-const buildBuildImageStep = (image) => {
-  let args = `docker build -t ${image} .`;
+const buildBuildImageStep = (_serviceName, serviceConfig) => {
+  const { build, image } = serviceConfig;
+  const { args: buildArgs } = build;
+
+  let args = `docker build -t ${image}`;
+
+  if (buildArgs) {
+    let buildArgsList = buildArgs;
+
+    if (!(buildArgs instanceof Array)) {
+      buildArgsList = Object.entries(buildArgs).map(([key, value]) => `${key}="${value}"`);
+    }
+
+    buildArgsList.forEach(buildArg => {
+      args += ` --build-arg ${buildArg}`
+    });
+  }
+
+  args += ' .';
   args += `\ndocker tag ${image} gcr.io/$PROJECT_ID/${image}`;
 
   return {
@@ -37,8 +54,8 @@ const buildBuildImageStep = (image) => {
     name: 'gcr.io/cloud-builders/docker',
     entrypoint: 'bash',
     args: ['-c', args],
-  }
-}
+  };
+};
 
 const buildPushImageStep = (image) => {
   return {
@@ -47,6 +64,6 @@ const buildPushImageStep = (image) => {
     entrypoint: 'bash',
     args: ['-c', `docker push gcr.io/$PROJECT_ID/${image}`],
   }
-}
+};
 
 module.exports = buildServiceSteps;
