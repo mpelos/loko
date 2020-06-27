@@ -5,6 +5,7 @@ const tmp = require('tmp');
 const YAML = require('yaml');
 
 const buildServiceSteps = require('./cloud-build/build-service-steps');
+const deploySteps = require('./cloud-build/deploy-steps');
 
 const CloudBuildEngine = (config) => {
   const buildConfigs = () => {
@@ -13,7 +14,8 @@ const CloudBuildEngine = (config) => {
     Object.entries(config.services || {}).forEach(([serviceName, serviceConfig]) => {
       const buildConfig = {
         steps: [
-          ...buildServiceSteps(serviceConfig),
+          ...buildServiceSteps(serviceName, serviceConfig),
+          ...deploySteps(serviceName, serviceConfig),
         ],
       };
 

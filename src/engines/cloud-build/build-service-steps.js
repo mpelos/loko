@@ -1,8 +1,10 @@
-const buildServiceSteps = (serviceConfig) => {
+const validateServiceProperty = require('../../validate-service-property');
+
+const buildServiceSteps = (serviceName, serviceConfig) => {
   const { build: serviceBuild, image } = serviceConfig;
   const { repository, branch, head } = serviceBuild;
 
-  if (!image) { throw new Error(`Missing services.${serviceName}.image`); }
+  validateServiceProperty(serviceConfig, serviceName, 'image');
 
   return [
     buildCloneGitRepoStep(repository, { branch, head }),
