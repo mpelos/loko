@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/mpelos/loko/issues"
   },
-  "homepage": "https://github.com/mpelos/loko#readme"
+  "homepage": "https://github.com/mpelos/loko#readme",
+  "dependencies": {
+    "commander": "^5.1.0",
+    "shelljs": "^0.8.4",
+    "tmp": "^0.2.1",
+    "yaml": "^1.10.0"
+  }
 }
