@@ -21,11 +21,10 @@ program
   .command('deploy [services...]')
   .description('Deploy services')
   .action((services) => {
-    try {
-      deployServices(lokoFilePath, services);
-    } catch (e) {
-      console.error('Error: ' + e.message);
-    }
+    deployServices(lokoFilePath, services)
+      .catch((e) => {
+        console.error('Error: ' + e.message);
+      });
   });
 
 program.parse(process.argv);

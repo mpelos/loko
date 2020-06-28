@@ -1,6 +1,6 @@
 {
   "name": "@mpelos/loko",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Serverless services deploy",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "commander": "^5.1.0",
+    "envsub": "^4.0.7",
     "shelljs": "^0.8.4",
     "tmp": "^0.2.1",
     "yaml": "^1.10.0"

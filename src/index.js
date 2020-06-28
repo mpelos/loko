@@ -1,14 +1,16 @@
-const fs = require('fs');
-
+const envsub = require('envsub');
 const YAML = require('yaml')
 
 const CloudBuildEngine = require('./engines/cloud-build-engine');
 
-exports.deployServices = (filePath, services) => {
-  const file = fs.readFileSync(filePath, 'utf-8');
-  const config = YAML.parse(file, { merge: true });
+exports.deployServices = async (filePath, services, { envFiles } = {}) => {
+  const envs = Object.entries(process.env).map(([name, value]) => new Object({ name, value }));
+  envobj = await envsub({ templateFile: filePath, outputFile: 'null', options: { envs, envFiles } });
+  const template = envobj.outputContents;
 
-  if (!config.engine) { throw new Error('Missing engine'); }
+  const config = YAML.parse(template, { merge: true });
+
+  if (!config.engine || !config.engine.name) { throw new Error('Missing engine'); }
 
   const engineName = typeof config.engine === 'string' ? config.engine : config.engine.name;
 
@@ -18,7 +20,7 @@ exports.deployServices = (filePath, services) => {
       engine = CloudBuildEngine(config);
       break;
     default:
-      throw new Error(`Unknown engine ${config.engine}`);
+      throw new Error(`Unknown engine ${config.engine.name}`);
   }
 
   engine.deploy(services);
