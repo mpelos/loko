@@ -18,11 +18,11 @@ program.parse(process.argv);
 const lokoFilePath = path.resolve(process.cwd(), program.file);
 
 program
-  .command('deploy')
+  .command('deploy [services...]')
   .description('Deploy services')
-  .action(() => {
+  .action((services) => {
     try {
-      deployServices(lokoFilePath);
+      deployServices(lokoFilePath, services);
     } catch (e) {
       console.error('Error: ' + e.message);
     }

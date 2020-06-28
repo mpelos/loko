@@ -4,7 +4,7 @@ const YAML = require('yaml')
 
 const CloudBuildEngine = require('./engines/cloud-build-engine');
 
-exports.deployServices = (filePath) => {
+exports.deployServices = (filePath, services) => {
   const file = fs.readFileSync(filePath, 'utf-8');
   const config = YAML.parse(file, { merge: true });
 
@@ -21,5 +21,5 @@ exports.deployServices = (filePath) => {
       throw new Error(`Unknown engine ${config.engine}`);
   }
 
-  engine.deploy();
+  engine.deploy(services);
 }

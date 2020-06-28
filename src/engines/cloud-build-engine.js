@@ -8,10 +8,12 @@ const buildServiceSteps = require('./cloud-build/build-service-steps');
 const deploySteps = require('./cloud-build/deploy-steps');
 
 const CloudBuildEngine = (config) => {
-  const buildConfigs = () => {
+  const buildConfigs = (servicesToInclude) => {
     const buildConfigs = {};
 
     Object.entries(config.services || {}).forEach(([serviceName, serviceConfig]) => {
+      if (servicesToInclude && servicesToInclude.length && !servicesToInclude.includes(serviceName)) { return; }
+
       const buildConfig = {
         steps: [
           ...buildServiceSteps(serviceName, serviceConfig),
@@ -27,7 +29,7 @@ const CloudBuildEngine = (config) => {
     return buildConfigs;
   }
 
-  const deploy = () => {
+  const deploy = (servicesToInclude) => {
     if (!shell.which('gcloud')) {
       throw new Error(
         "Missing 'Google Cloud SDK'. Follow Google instructios for installation: " +
@@ -35,7 +37,7 @@ const CloudBuildEngine = (config) => {
       )
     }
 
-    Object.entries(buildConfigs()).forEach(([serviceName, buildConfig]) => {
+    Object.entries(buildConfigs(servicesToInclude)).forEach(([serviceName, buildConfig]) => {
       tmp.file((err, path, fd, cleanupCallback) => {
         fs.writeFileSync(path, buildConfig);
         shell.config.silent = true;
