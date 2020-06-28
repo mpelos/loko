@@ -6,7 +6,7 @@ const CloudBuildEngine = require('./engines/cloud-build-engine');
 
 exports.deployServices = (filePath) => {
   const file = fs.readFileSync(filePath, 'utf-8');
-  const config = YAML.parse(file);
+  const config = YAML.parse(file, { merge: true });
 
   if (!config.engine) { throw new Error('Missing engine'); }
 
