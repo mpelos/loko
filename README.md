@@ -26,6 +26,8 @@ services:
         vpc_connector: default-connector
       environment:
         NODE_ENV: production
+      env_files:
+        - ./env_file/path
 
   some-cloud-functions-http-service:
     build:
