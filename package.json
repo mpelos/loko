@@ -1,6 +1,6 @@
 {
   "name": "@mpelos/loko",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Serverless services deploy",
   "main": "index.js",
   "scripts": {
@@ -16,6 +16,9 @@
     "url": "https://github.com/mpelos/loko/issues"
   },
   "homepage": "https://github.com/mpelos/loko#readme",
+  "bin": {
+    "loko": "./bin/loko"
+  },
   "dependencies": {
     "commander": "^5.1.0",
     "shelljs": "^0.8.4",
