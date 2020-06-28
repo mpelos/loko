@@ -11,7 +11,7 @@ const { deployServices } = require('../src/index');
 program.version(package.version);
 
 program
-  .option('-f, --file <file>', 'Specify an alternate loko file (default: loko.yml)', 'loko.yml')
+  .option('-f, --file <file>', 'Specify an alternate loko file', 'loko.yml')
 
 program.parse(process.argv);
 
