@@ -43,7 +43,8 @@ const parseEnvs = (file, baseDir) => {
     ...config,
     services: Object.entries(config.services || {}).reduce((acc, [serviceName, serviceConfig]) => {
       acc[serviceName] = serviceConfig
-      const { environment: envsObj, env_files: envFiles } = serviceConfig;
+      const { deploy } = serviceConfig;
+      const { environment: envsObj, env_files: envFiles } = deploy || {};
 
       if (envsObj) {
         serviceConfig.environment = envObjToArray(envsObj);
@@ -57,11 +58,11 @@ const parseEnvs = (file, baseDir) => {
           return [...acc, ...envs];
         }, []);
 
-        if (!serviceConfig.environment) { serviceConfig.environment = []; }
-        serviceConfig.environment = [...serviceConfig.environment, envFilesEnvs];
+        if (!deploy.environment) { deploy.environment = []; }
+        deploy.environment = [...deploy.environment, envFilesEnvs];
       }
 
-      return acc;
+      return { ...acc, deploy };
     }, {})
   };
 
