@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const process = require('process');
 
 const envsub = require('envsub');
 const tmp = require('tmp');
@@ -59,10 +58,16 @@ const parseEnvs = (file, baseDir) => {
         }, []);
 
         if (!deploy.environment) { deploy.environment = []; }
-        deploy.environment = [...deploy.environment, envFilesEnvs];
+        deploy.environment = [...deploy.environment, ...envFilesEnvs];
       }
 
-      return { ...acc, deploy };
+      return {
+        ...acc,
+        [serviceName]: {
+          ...serviceConfig,
+          deploy
+        }
+      };
     }, {})
   };
 

@@ -19,7 +19,8 @@ const buildInstallFirebaseToolsStep = () => {
 };
 
 const buildDeployStep = () => {
-  let args = './node_modules/.bin/firebase --project $PROJECT_ID deploy --public app';
+  let args = 'ls app' +
+    '\n./node_modules/.bin/firebase --project $PROJECT_ID deploy --public app';
 
   return {
     id: 'deploy',
