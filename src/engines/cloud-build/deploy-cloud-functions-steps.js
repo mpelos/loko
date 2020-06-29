@@ -15,7 +15,7 @@ const deployCloudFunctionSteps = (serviceName, serviceConfig) => {
 const buildDeployStep = (serviceName, serviceConfig) => {
   const { deploy } = serviceConfig;
   const { environment: envs, name: deployName, options, public } = deploy;
-  const { entrypoint, memory, region, runtime, timeout, trigger, vpc_conector: vpcConnector } = options;
+  const { entrypoint, memory, region, runtime, timeout, trigger, vpc_connector: vpcConnector } = options;
 
   let args = `CMD="gcloud functions deploy ${deployName}` +
     ` --entry-point ${entrypoint}` +
