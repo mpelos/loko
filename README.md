@@ -43,6 +43,7 @@ services:
       options:
         entrypoint: index
         memory: 256MB
+        region: us-central1
         runtime: nodejs10
         timeout: 300
         trigger: http
@@ -62,6 +63,7 @@ services:
       options:
         entrypoint: index
         memory: 256MB
+        region: us-central1
         runtime: nodejs10
         timeout: 300
         trigger: topic

@@ -15,12 +15,13 @@ const deployCloudFunctionSteps = (serviceName, serviceConfig) => {
 const buildDeployStep = (serviceName, serviceConfig) => {
   const { deploy } = serviceConfig;
   const { environment: envs, name: deployName, options, public } = deploy;
-  const { entrypoint, memory, runtime, timeout, trigger, vpc_conector: vpcConnector } = options;
+  const { entrypoint, memory, region, runtime, timeout, trigger, vpc_conector: vpcConnector } = options;
 
   let args = `CMD="gcloud functions deploy ${deployName}` +
     ` --entry-point ${entrypoint}` +
     ` --runtime ${runtime}` +
     ' --source ./app';
+  if (region) { args+= ` --region ${region}`; }
 
   if (trigger === 'topic') {
     validateServiceProperty(serviceConfig, serviceName, 'deploy.options.trigger_topic');
