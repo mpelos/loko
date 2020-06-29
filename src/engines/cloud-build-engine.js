@@ -6,7 +6,6 @@ const YAML = require('yaml');
 
 const buildServiceSteps = require('./cloud-build/build-service-steps');
 const deploySteps = require('./cloud-build/deploy-steps');
-const { option } = require('commander');
 
 const CloudBuildEngine = (config) => {
   const buildConfigs = (servicesToInclude) => {
