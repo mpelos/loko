@@ -1,6 +1,6 @@
 {
   "name": "@mpelos/loko",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Serverless services deploy",
   "main": "index.js",
   "scripts": {

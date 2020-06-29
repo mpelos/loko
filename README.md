@@ -9,7 +9,9 @@ version: "0.1"
 
 engine:
   name: cloud-build
-  timeout: 900s
+  options:
+    project: my-gcp-project
+    timeout: 900s # Cloud build timeout
 
 services:
   some-cloudrun-service:

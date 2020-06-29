@@ -6,9 +6,12 @@ const YAML = require('yaml');
 
 const buildServiceSteps = require('./cloud-build/build-service-steps');
 const deploySteps = require('./cloud-build/deploy-steps');
+const { option } = require('commander');
 
 const CloudBuildEngine = (config) => {
   const buildConfigs = (servicesToInclude) => {
+    const { engine } = config;
+    const { options: engineOptions = {} } = engine;
     const buildConfigs = {};
 
     Object.entries(config.services || {}).forEach(([serviceName, serviceConfig]) => {
@@ -21,7 +24,7 @@ const CloudBuildEngine = (config) => {
         ],
       };
 
-      if (config.engine.timeout) { buildConfig.timeout = config.engine.timeout; }
+      if (engineOptions.timeout) { buildConfig.timeout = engineOptions.timeout; }
 
       buildConfigs[serviceName] = YAML.stringify(buildConfig, null, 4);
     });
@@ -37,16 +40,23 @@ const CloudBuildEngine = (config) => {
       )
     }
 
+    const { engine } = config;
+    const { options: engineOptions = {} } = engine;
+
     Object.entries(buildConfigs(servicesToInclude)).forEach(([serviceName, buildConfig]) => {
       tmp.file((err, path, fd, cleanupCallback) => {
         fs.writeFileSync(path, buildConfig);
         shell.config.silent = true;
-        const result = shell.exec(`gcloud builds submit --no-source --async --config ${path}`);
+        let cmd = `gcloud builds submit --no-source --async --config ${path}`;
+        if (engineOptions.project) { cmd += ` --project ${engineOptions.project}` }
+        const result = shell.exec(cmd);
 
         if (result.code === 0) {
           const logLine = result.stderr.split('\n')[1];
           const logUrl = /\[(.+)\]/.exec(logLine)[1];
           console.info(`${serviceName}: ${logUrl}`);
+        } else {
+          throw new Error(result.stderr);
         }
 
         cleanupCallback();
