@@ -8,15 +8,14 @@ const YAML = require('yaml')
 
 const CloudBuildEngine = require('./engines/cloud-build-engine');
 
-exports.deployServices = async (filePath, servicesToDeploy, { envFiles } = {}) => {
+exports.deployServices = async (filePath, servicesToDeploy) => {
   let fileContent = fs.readFileSync(filePath, 'utf-8');
   const baseDir = path.dirname(filePath);
   fileContent = parseEnvs(fileContent, baseDir);
   const tmpObj = tmp.fileSync();
   fs.writeFileSync(tmpObj.name, fileContent);
 
-  const envs = Object.entries(process.env).map(([name, value]) => new Object({ name, value }));
-  envobj = await envsub({ templateFile: tmpObj.name, options: { envs } });
+  const envobj = await envsub({ templateFile: tmpObj.name });
   fileContent = envobj.outputContents;
 
   const config = YAML.parse(fileContent, { merge: true });
