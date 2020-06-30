@@ -17,7 +17,7 @@ const buildDeployStep = (serviceName, serviceConfig) => {
   const { environment: envs, name: deployName, options, public } = deploy;
   const { entrypoint, memory, region, runtime, timeout, trigger, vpc_connector: vpcConnector } = options;
 
-  let args = `CMD="gcloud functions deploy ${deployName}` +
+  let args = `gcloud functions deploy ${deployName}` +
     ` --entry-point ${entrypoint}` +
     ` --runtime ${runtime}` +
     ' --source ./app';
@@ -35,12 +35,7 @@ const buildDeployStep = (serviceName, serviceConfig) => {
   if (memory) { args += ` --memory ${memory}`; }
   if (timeout) { args += ` --timeout ${timeout}`; }
   if (vpcConnector) { args += ` --vpc-connector ${vpcConnector}`; }
-  if (envs) { args += ` --set-env-vars ${envs.join(',')}`; }
-
-  args += `"
-echo \\$ $$CMD
-$$CMD
-  `;
+  if (envs) { args += ` --set-env-vars "^||^${envs.map(e => e.replace(/"/g, '\\"')).join('||')}"`; }
 
   return {
     id: 'deploy',
