@@ -81,5 +81,7 @@ services:
     image:
     deploy:
       type: firebase-hosting
-      app_container_dir: /opt/app
+      app_container_dir: /opt/app/public_dir
+      options:
+        config_file: firebase.production.json
 ```

@@ -1,11 +1,10 @@
 const extractFilesSteps = require('./extract-files-steps');
-const validateServiceProperty = require('../../validate-service-property');
 
 const deployFirebaseHostingSteps = (serviceName, serviceConfig) => {
   return [
     ...extractFilesSteps(serviceName, serviceConfig),
     buildInstallFirebaseToolsStep(),
-    buildDeployStep(),
+    buildDeployStep(serviceName, serviceConfig),
   ]
 };
 
@@ -18,9 +17,15 @@ const buildInstallFirebaseToolsStep = () => {
   };
 };
 
-const buildDeployStep = () => {
-  let args = 'ls app' +
-    '\n./node_modules/.bin/firebase --project $PROJECT_ID deploy --public app';
+const buildDeployStep = (_serviceName, serviceConfig) => {
+  const { deploy } = serviceConfig;
+  const { name: deployName, options = {} } = deploy;
+  const { config_file: configFile } = options;
+
+  let args = 'ls app';
+  if (configFile) { args += `\nmv ${configFile} firebase.json`; }
+  args += '\n./node_modules/.bin/firebase --project $PROJECT_ID deploy --public app';
+  if (deployName) { args += ` --only hosting:${deployName}`}
 
   return {
     id: 'deploy',
