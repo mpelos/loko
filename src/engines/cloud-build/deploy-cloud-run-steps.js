@@ -13,7 +13,11 @@ const deployCloudRunSteps = (serviceName, serviceConfig) => {
     ` --image gcr.io/$PROJECT_ID/${image}` +
     ' --platform managed' +
     ` --region ${region}`;
-  if (public) { args += ' --allow-unauthenticated'; }
+  if (public) {
+    args += ' --allow-unauthenticated';
+  } else if (public === false) {
+    args += ' --no-allow-unauthenticated';
+  }
   if (memory) { args += ` --memory ${memory}`; }
   if (vpcConnector) { args += ` --vpc-connector ${vpcConnector}`; }
   if (envs) { args += ` --set-env-vars "^||^${envs.map(e => e.replace(/"/g, '\\"')).join('||')}"`; }
