@@ -16,7 +16,9 @@ engine:
 services:
   some-cloudrun-service:
     build:
-      repository: https://somegit.com/somerepo/somerepo.git
+      repository:
+        type: git
+        url: https://somegit.com/somerepo/somerepo.git
       branch: master
     image: some-cloudrun-service:latest
     deploy:
@@ -33,8 +35,10 @@ services:
 
   some-cloud-functions-http-service:
     build:
-      repository: https://somegit.com/somerepo/somerepo.git
-      branch: master
+      repository:
+        type: cloud_source_repositories
+        name: repoName
+      head: a3e0d01
     image: some-cloud-functions-http-service:latest
     deploy:
       type: google-cloud-functions
@@ -53,7 +57,9 @@ services:
 
   some-cloud-functions-topic-service:
     build:
-      repository: https://somegit.com/somerepo/somerepo.git
+      repository:
+        type: git
+        url: https://somegit.com/somerepo/somerepo.git
       branch: master
     image: some-cloud-functions-http-service:latest
     deploy:
@@ -74,7 +80,9 @@ services:
 
   some-firebase-hosting-app:
     build:
-      repository: https://somegit.com/somerepo/somerepo.git
+      repository:
+        type: git
+        url: https://somegit.com/somerepo/somerepo.git
       branch: master
       args:
         ENV: production
